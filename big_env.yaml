@@ -19,4 +19,4 @@ dependencies:
   - matplotlib
   - pip
   - pip:
-    tensorflow-datasets
+    - tensorflow-datasets
