@@ -8,10 +8,8 @@ dependencies:
   - pytorch=1.13
   - torchvision
   - torchaudio
-  - pytorch-cuda=11.7
-  - tensorflow-gpu=2.11
+  - tensorflow=2.11
   - jax
-  - cuda-nvcc
   - sympy
   - scipy
   - statsmodels
