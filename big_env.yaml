@@ -22,5 +22,8 @@ dependencies:
   - pip
   - pip:
     - -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-    - jax[cuda11_cudnn82]
+    - jax[cuda11_cudnn82]==0.4.4
+    - jaxlib[cuda11_cudnn82]==0.4.4
     - tensorflow-datasets
+variables:
+  XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
