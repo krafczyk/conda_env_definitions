@@ -13,6 +13,8 @@ dependencies:
   - tensorflow-gpu=2.11
   - numba
   - cuda-nvcc
+  - transformers
+  - huggingface_hub
   - sympy
   - scipy
   - statsmodels
