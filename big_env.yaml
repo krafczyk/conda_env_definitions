@@ -18,6 +18,8 @@ dependencies:
   - statsmodels
   - scikit-learn
   - matplotlib
+  - zstandard
+  - spacy
   - yt
   - pip
   - pip:
