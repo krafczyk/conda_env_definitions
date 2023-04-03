@@ -14,6 +14,9 @@ dependencies:
   - numba
   - cuda-nvcc
   - transformers
+  - tokenizers
+  - datasets
+  - accelerate
   - huggingface_hub
   - sympy
   - scipy
@@ -22,6 +25,7 @@ dependencies:
   - matplotlib
   - zstandard
   - spacy
+  - pybind11
   - yt
   - pip
   - pip:
@@ -29,5 +33,6 @@ dependencies:
     - jax[cuda11_cudnn82]==0.4.4
     - jaxlib[cuda11_cudnn82]==0.4.4
     - tensorflow-datasets
+    - cppimport
 variables:
   XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
