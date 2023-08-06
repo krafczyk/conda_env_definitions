@@ -6,8 +6,6 @@ dependencies:
   - python=3.9
   - jupyter
   - jupyterlab
+  - notebook
   - nb_conda_kernels
   - ipykernel
-  - pip
-  - pip:
-    - notebook
