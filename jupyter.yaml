@@ -1,0 +1,13 @@
+name: jupyter
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - jupyter
+  - jupyterlab
+  - nb_conda_kernels
+  - ipykernel
+  - pip
+  - pip:
+    - notebook
