@@ -7,8 +7,8 @@ dependencies:
   - jupyterlab_server=2.*
   - jupyter_server=2.*
   - nb_conda_kernels=2.5.*
+  - jupyter-collaboration
   - jinja2
-  - jupyter_contrib_nbextensions
   - ipykernel
   - jupyter_client
   - pyzmq
