@@ -1,11 +1,21 @@
 name: jupyter
 channels:
-  - defaults
+  - default
   - conda-forge
 dependencies:
-  - python=3.9
-  - jupyter
-  - jupyterlab
-  - notebook
-  - nb_conda_kernels
+  - jupyterlab=4.*
+  - jupyterlab_server=2.*
+  - jupyter_server=2.*
+  - nb_conda_kernels=2.5.*
+  - jinja2
+  - jupyter_contrib_nbextensions
   - ipykernel
+  - jupyter_client
+  - pyzmq
+  - terminado
+  - tornado
+  - nbconvert
+  - nbformat
+  - nodejs
+  - jupytext
+  - pip
