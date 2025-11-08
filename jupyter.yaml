@@ -9,6 +9,7 @@ dependencies:
   - nb_conda_kernels=2.5.*
   - jupyterlab_execute_time
   - jupyter-collaboration
+  - jupyterlab_execute_time
   - jinja2
   - ipykernel
   - jupyter_client
