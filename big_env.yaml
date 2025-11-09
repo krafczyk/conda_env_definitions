@@ -6,13 +6,15 @@ channels:
 dependencies:
   - python=3.10
   - ipykernel
-  - pytorch=1.13
+  - pytorch-gpu
+  - spacy
+  - numba
+  - pandas
+  - xarray
+  - cuda-nvcc
   - torchvision
   - torchaudio
-  - pytorch-cuda=11.7
-  - tensorflow-gpu=2.11
-  - numba
-  - cuda-nvcc
+  - ray-all
   - transformers
   - tokenizers
   - datasets
@@ -24,15 +26,14 @@ dependencies:
   - scikit-learn
   - matplotlib
   - zstandard
-  - spacy
   - pybind11
   - yt
   - pip
   - pip:
-    - -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-    - jax[cuda11_cudnn82]==0.4.4
-    - jaxlib[cuda11_cudnn82]==0.4.4
+    - "jax[cuda12]"
+    - "tensorflow[and-cuda]>=2.18"
     - tensorflow-datasets
     - cppimport
-variables:
-  XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
+#variables:
+#  XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
+#    - "--find-links=https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
