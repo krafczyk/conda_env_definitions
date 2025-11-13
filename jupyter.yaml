@@ -1,6 +1,5 @@
 name: jupyter
 channels:
-  - default
   - conda-forge
 dependencies:
   - jupyterlab=4.*
@@ -13,6 +12,11 @@ dependencies:
   - jinja2
   - ipykernel
   - jupyter_client
+  - jupyter_bokeh
+  - holoviews
+  - bokeh
+  - panel
+  - pyviz_comms
   - pyzmq
   - terminado
   - tornado
