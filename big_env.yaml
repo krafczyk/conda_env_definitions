@@ -4,27 +4,40 @@ channels:
   - pytorch
   - nvidia
 dependencies:
-  - python=3.10
+  - python=3.12
   - ipykernel
-  - pytorch-gpu
+  - pytorch-gpu=*=cuda126*
+  - torchvision=*=cuda126*
+  - torchaudio=*=cuda126*
+  - accelerate
+  - transformers
+  - huggingface_hub
+  - tokenizers
+  - xonsh=0.22
+  - ray-all
   - spacy
+  - numpy
   - numba
   - pandas
+  - pandas-stubs
   - xarray
   - cuda-nvcc
-  - torchvision
-  - torchaudio
-  - ray-all
-  - transformers
-  - tokenizers
-  - datasets
-  - accelerate
-  - huggingface_hub
+  - datasets>=4.0
   - sympy
   - scipy
+  - scipy-stubs
   - statsmodels
   - scikit-learn
   - matplotlib
+  - seaborn
+  - plotly
+  - bokeh
+  - panel
+  - hvsampledata
+  - datashader
+  - holoviews
+  - hvplot
+  - pyviz_comms
   - zstandard
   - pybind11
   - yt
