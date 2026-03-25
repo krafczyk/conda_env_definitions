@@ -9,3 +9,4 @@ tensorflow==2.19.0
 tensorflow-datasets
 jax[cuda12]
 cppimport
+ray
