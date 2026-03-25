@@ -106,7 +106,7 @@ if __name__ == '__main__':
     loss_func = nn.CrossEntropyLoss()
     optimizer = optim.Adam(cnn.parameters(), lr = 0.01)
 
-    num_epochs = 10
+    num_epochs = 2
 
     train(num_epochs, cnn, loaders)
 
