@@ -24,9 +24,6 @@ class WheelInfoError(Exception):
     pass
 
 
-###
-
-
 def normalize_project_name(name: str) -> str:
     return re.sub(r"[-_.]+", "-", name).lower()
 
@@ -240,28 +237,6 @@ def version_matches(version: str, specifier: str) -> bool:
     return version in SpecifierSet(specifier)
 
 
-def fetch_pypi_simple_json(project_name: str) -> dict:
-    normalized = normalize_project_name(project_name)
-    url = f"https://pypi.org/simple/{urllib.parse.quote(normalized)}/"
-    req = urllib.request.Request(
-        url,
-        headers={
-            "Accept": "application/vnd.pypi.simple.v1+json",
-            "User-Agent": "wheel_info.py",
-        },
-    )
-
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return json.load(resp)
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            raise WheelInfoError(f"Project not found on PyPI: {project_name!r}") from e
-        raise
-    except urllib.error.URLError as e:
-        raise WheelInfoError(f"Failed to fetch PyPI index for {project_name!r}: {e}") from e
-
-
 def extract_wheel_info(filename: str) -> tuple[str, object, object]:
     filename = urllib.parse.unquote(filename)
     try:
@@ -311,7 +286,11 @@ def list_matching_wheels(query: str, extra_index_urls: list[str]) -> list[dict]:
     return result
 
 
-def download_single_wheel(package_spec: str, dest_dir: Path) -> Path:
+def download_single_wheel(
+    package_spec: str,
+    dest_dir: Path,
+    extra_index_urls: list[str] | None = None,
+) -> Path:
     cmd = [
         sys.executable,
         "-m",
@@ -321,8 +300,14 @@ def download_single_wheel(package_spec: str, dest_dir: Path) -> Path:
         "--only-binary=:all:",
         "-d",
         str(dest_dir),
-        package_spec,
     ]
+
+    if extra_index_urls:
+        for url in extra_index_urls:
+            cmd.extend(["--extra-index-url", url])
+
+    cmd.append(package_spec)
+
     subprocess.run(cmd, check=True)
 
     wheels = sorted(dest_dir.glob("*.whl"))
@@ -345,10 +330,27 @@ def read_wheel_metadata(wheel_path: Path) -> str:
     raise WheelInfoError(f"No METADATA file found in wheel {wheel_path.name!r}")
 
 
-def cmd_metadata(package_spec: str) -> int:
+def filter_requires_dist(metadata: str) -> str:
+    lines = []
+    for line in metadata.splitlines():
+        if line.startswith("Requires-Dist:"):
+            lines.append(line)
+    return "\n".join(lines) + ("\n" if lines else "")
+
+
+def cmd_metadata(
+    package_spec: str,
+    extra_index_urls: list[str] | None = None,
+    requires_only: bool = False,
+) -> int:
     with tempfile.TemporaryDirectory() as tmpdir:
-        wheel_path = download_single_wheel(package_spec, Path(tmpdir))
+        wheel_path = download_single_wheel(
+            package_spec,
+            Path(tmpdir),
+            extra_index_urls=extra_index_urls)
         metadata = read_wheel_metadata(wheel_path)
+        if requires_only:
+            metadata = filter_requires_dist(metadata)
         print(metadata, end="")
     return 0
 
@@ -399,6 +401,11 @@ def build_parser() -> argparse.ArgumentParser:
         "package_spec",
         help="Example: tensorflow==2.19.0",
     )
+    metadata_parser.add_argument(
+        "--requires-only",
+        action="store_true",
+        help="Print only Requires-Dist lines from METADATA.",
+    )
 
     list_parser = subparsers.add_parser(
         "list",
@@ -423,9 +430,15 @@ def main() -> int:
 
     try:
         if args.mode == "metadata":
-            return cmd_metadata(args.package_spec)
+            return cmd_metadata(
+                args.package_spec,
+                extra_index_urls=args.extra_index_url,
+                requires_only=args.requires_only)
         if args.mode == "list":
-            return cmd_list(args.query, args.show_urls, args.extra_index_url)
+            return cmd_list(
+                args.query,
+                args.show_urls,
+                args.extra_index_url)
         raise WheelInfoError(f"Unknown mode: {args.mode}")
     except subprocess.CalledProcessError as e:
         print(f"pip download failed with exit code {e.returncode}", file=sys.stderr)
