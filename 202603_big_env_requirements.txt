@@ -10,3 +10,6 @@ tensorflow-datasets
 jax[cuda12]
 cppimport
 ray
+
+pytest
+pytest-cov
