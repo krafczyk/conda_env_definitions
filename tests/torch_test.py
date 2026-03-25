@@ -8,25 +8,20 @@ class CNN(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=5, stride=1, padding=2),
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=0),  # 28 -> 26
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2),
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=0), # 26 -> 24
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2),                           # 24 -> 12
         )
 
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2),
-        )
-
-        self.out = nn.Linear(32 * 7 * 7, 10)
+        self.classifier = nn.Linear(32 * 12 * 12, 10)
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
+        x = self.features(x)
         x = x.reshape(x.size(0), -1)
-        return self.out(x)
+        return self.classifier(x)
 
 
 def evaluate(model, loader, loss_func, device):
@@ -58,7 +53,7 @@ def train(num_epochs, model, loaders, loss_func, optimizer, device):
         running_samples = 0
 
         for i, (images, labels) in enumerate(loaders["train"]):
-            images = images.to(device)
+            images = images.to(device, memory_format=torch.channels_last)
             labels = labels.to(device)
 
             optimizer.zero_grad()
@@ -132,7 +127,7 @@ if __name__ == "__main__":
         ),
     }
 
-    model = CNN().to(device)
+    model = CNN().to(device=device, memory_format=torch.channels_last)
 
     loss_func = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
