@@ -290,14 +290,21 @@ def download_single_wheel(
     package_spec: str,
     dest_dir: Path,
     extra_index_urls: list[str] | None = None,
+    extra_arg_list: list[str] | None = None,
 ) -> Path:
+
+    if extra_arg_list is None:
+        extra_arg_list = []
+
     cmd = [
         sys.executable,
         "-m",
         "pip",
         "download",
         "--no-deps",
-        "--only-binary=:all:",
+        "--only-binary=:all:" ]
+    cmd += extra_arg_list
+    cmd += [
         "-d",
         str(dest_dir),
     ]
@@ -341,13 +348,15 @@ def filter_requires_dist(metadata: str) -> str:
 def cmd_metadata(
     package_spec: str,
     extra_index_urls: list[str] | None = None,
+    extra_arg_list: list[str] | None = None,
     requires_only: bool = False,
 ) -> int:
     with tempfile.TemporaryDirectory() as tmpdir:
         wheel_path = download_single_wheel(
             package_spec,
             Path(tmpdir),
-            extra_index_urls=extra_index_urls)
+            extra_index_urls=extra_index_urls,
+            extra_arg_list=extra_arg_list)
         metadata = read_wheel_metadata(wheel_path)
         if requires_only:
             metadata = filter_requires_dist(metadata)
@@ -406,6 +415,17 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print only Requires-Dist lines from METADATA.",
     )
+    metadata_parser.add_argument(
+        "--python-version",
+        type=int,
+        required=False,
+        help="The python version to search in")
+    metadata_parser.add_argument(
+        "--implementation",
+        type=str,
+        default="cp",
+        help="The implementation to use")
+
 
     list_parser = subparsers.add_parser(
         "list",
@@ -430,9 +450,18 @@ def main() -> int:
 
     try:
         if args.mode == "metadata":
+            extra_arg_list = []
+            if args.python_version is not None:
+                py_version = str(args.python_version)
+                py_imp = args.implementation
+                extra_arg_list += [ "--python-version", py_version ]
+                extra_arg_list += [ "--implementation", py_imp ]
+                extra_arg_list += [ "--abi", f"{py_imp}{py_version}" ]
+
             return cmd_metadata(
                 args.package_spec,
                 extra_index_urls=args.extra_index_url,
+                extra_arg_list=extra_arg_list,
                 requires_only=args.requires_only)
         if args.mode == "list":
             return cmd_list(
