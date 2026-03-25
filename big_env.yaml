@@ -1,27 +1,22 @@
 name: big_env
 channels:
   - conda-forge
-  - pytorch
-  - nvidia
+  #- pytorch
+  #- nvidia
 dependencies:
   - python=3.12
+  - numpy<2.2.0,>=1.26.0
+  - xonsh=0.22
   - ipykernel
-  - pytorch-gpu=*=cuda126*
-  - torchvision=*=cuda126*
-  - torchaudio=*=cuda126*
-  - accelerate
   - transformers
   - huggingface_hub
   - tokenizers
-  - xonsh=0.22
-  - ray-all
+  #- ray-all
   - spacy
-  - numpy
   - numba
   - pandas
   - pandas-stubs
   - xarray
-  - cuda-nvcc
   - datasets>=4.0
   - sympy
   - scipy
@@ -43,10 +38,7 @@ dependencies:
   - yt
   - pip
   - pip:
-    - "jax[cuda12]"
-    - "tensorflow[and-cuda]>=2.18"
-    - tensorflow-datasets
-    - cppimport
+    - -r big_env_requirements.txt
 #variables:
 #  XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
 #    - "--find-links=https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
