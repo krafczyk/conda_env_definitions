@@ -1,0 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+torch==2.7.0+cu126
+torchvision
+torchaudio
+nvidia-cuda-nvcc-cu12==12.6.85 # Needed because torch doesn't pull this in
+
+tensorflow==2.19.0
+tensorflow-datasets
+jax[cuda12]
+cppimport

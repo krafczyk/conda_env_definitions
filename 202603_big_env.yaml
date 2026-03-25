@@ -1,0 +1,44 @@
+name: big_env
+channels:
+  - conda-forge
+  #- pytorch
+  #- nvidia
+dependencies:
+  - python=3.12
+  - numpy<2.2.0,>=1.26.0
+  - xonsh=0.22
+  - ipykernel
+  - transformers
+  - huggingface_hub
+  - tokenizers
+  #- ray-all
+  - spacy
+  - numba
+  - pandas
+  - pandas-stubs
+  - xarray
+  - datasets>=4.0
+  - sympy
+  - scipy
+  - scipy-stubs
+  - statsmodels
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - plotly
+  - bokeh
+  - panel
+  - hvsampledata
+  - datashader
+  - holoviews
+  - hvplot
+  - pyviz_comms
+  - zstandard
+  - pybind11
+  - yt
+  - pip
+  - pip:
+    - -r 202603_big_env_requirements.txt
+#variables:
+#  XLA_FLAGS: --xla_gpu_cuda_data_dir=/opt/cuda
+#    - "--find-links=https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
