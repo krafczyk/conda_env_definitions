@@ -36,6 +36,8 @@ dependencies:
   - zstandard
   - pybind11
   - yt
+  - bazel
+  - clang-18
   - pip
   - pip:
     - -r big_env_requirements.txt
