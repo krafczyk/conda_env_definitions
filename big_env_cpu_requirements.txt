@@ -1,0 +1,10 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.7.0
+torchvision
+torchaudio
+
+tensorflow==2.19.0
+tensorflow-datasets
+jax
+cppimport
